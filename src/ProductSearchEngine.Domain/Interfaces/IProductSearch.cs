@@ -2,7 +2,7 @@
 {
     public interface IProductSearch
     {
-        Task<IEnumerable<Product>> Serch(string fullUrl);
+        Task<IEnumerable<Product>> Serch(IProductSearch typeSearch,string fullUrl);
         Task<string> CallUrl(string fullUrl);
     }
 }

@@ -7,6 +7,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddScoped<IProductSearch, ProductSearchBuscape>();
+builder.Services.AddScoped<IFactoryProductSearch, FactoryProductSearch>();
+builder.Services.AddScoped<IDefineLinkSearch, DefineLinkSearch>();
 
 var app = builder.Build();
 

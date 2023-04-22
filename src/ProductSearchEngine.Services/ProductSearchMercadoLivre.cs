@@ -10,7 +10,7 @@ using ProductSearchEngine.Domain.Interfaces;
 
 namespace ProductSearchEngine.Services
 {
-    public class ProductSearchBuscape : IProductSearch
+    public class ProductSearchMercadoLivre : IProductSearch
     {
         public async Task<string> CallUrl(string fullUrl)
         {
@@ -21,7 +21,7 @@ namespace ProductSearchEngine.Services
             var t = await client.GetStringAsync(fullUrl);
             return t;
         }
-      
+
         public Task<IEnumerable<Product>> Serch(IProductSearch typeSearch, string fullUrl)
         {
             throw new NotImplementedException();
