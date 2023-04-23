@@ -5,8 +5,8 @@ using System.Threading.Tasks;
 using System.Net;
 using System.Text;
 using System.IO;
-using ProductSearchEngine.Domain;
 using ProductSearchEngine.Domain.Interfaces;
+using ProductSearchEngine.Domain.Eitities;
 
 namespace ProductSearchEngine.Services
 {

@@ -1,12 +1,12 @@
 ﻿using System.Linq.Expressions;
 
-namespace ProductSearchEngine.Domain.Interfaces
+namespace ProductSearchEngine.Domain.Interfaces.Repositories
 {
     public interface IRepository<T>
     {
         Task<IQueryable<T>> GetAll();
         Task<T> GetById(int? id);
-        Task<IQueryable<T>> FindAllFilter(Expression<Func<T, bool>> expression);
+        //Task<ICollection<T>> FindAllFilter(Expression<Func<T, bool>> expression);
         Task Add(T entity);
     }
 }

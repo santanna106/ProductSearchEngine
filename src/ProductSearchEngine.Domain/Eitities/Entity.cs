@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace ProductSearchEngine.Domain
+namespace ProductSearchEngine.Domain.Eitities
 {
     public abstract class Entity
     {

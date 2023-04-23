@@ -1,4 +1,6 @@
-﻿namespace ProductSearchEngine.Domain.Interfaces
+﻿using ProductSearchEngine.Domain.Eitities;
+
+namespace ProductSearchEngine.Domain.Interfaces
 {
     public interface IProductSearch
     {
