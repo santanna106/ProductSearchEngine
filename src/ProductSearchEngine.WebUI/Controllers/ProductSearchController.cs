@@ -1,6 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using ProductSearchEngine.Domain;
-using ProductSearchEngine.Domain.Enum;
 using ProductSearchEngine.Domain.Interfaces;
 
 namespace ProductSearchEngine.WebUI.Controllers
