@@ -1,16 +1,10 @@
 ﻿using HtmlAgilityPack;
-using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Threading.Tasks;
-using System.Net;
-using System.Text;
-using System.IO;
 using ProductSearchEngine.Domain.Interfaces;
 using ProductSearchEngine.Domain.Eitities;
 
 namespace ProductSearchEngine.Services
 {
-    public class ProductSearchMercadoLivre : IProductSearch
+    public class ProductSearchMercadoLivre : IProductSearchMercadoLivre
     {
         public async Task<string> CallUrl(string fullUrl)
         {
@@ -22,7 +16,12 @@ namespace ProductSearchEngine.Services
             return t;
         }
 
-        public Task<IEnumerable<Product>> Serch(IProductSearch typeSearch, string fullUrl)
+        public async Task<IEnumerable<Product>> ParseHtmlToObject(string html)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<IEnumerable<Product>> Serch(string fullUrl, int categoryId, int siteId)
         {
             throw new NotImplementedException();
         }

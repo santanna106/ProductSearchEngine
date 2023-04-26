@@ -1,39 +1,38 @@
 ﻿using HtmlAgilityPack;
-using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Threading.Tasks;
-using System.Net;
-using System.Text;
-using System.IO;
 using ProductSearchEngine.Domain.Interfaces;
 using ProductSearchEngine.Domain.Eitities;
-using System.Linq;
+using ProductSearchEngine.Domain.Interfaces.Repositories;
 
 namespace ProductSearchEngine.Services
 {
-    public class ProductSearchBuscape : IProductSearch
+    public class ProductSearchBuscape : IProductSearchBuscape
     {
         private readonly HttpClient _httpClient;
         private readonly HtmlDocument _htmlDocument;
-        public ProductSearchBuscape(){
+        private readonly ICategoryRepository _categoryRepository;
+        private int siteId;
+        private int categoryId;
+   
+        public ProductSearchBuscape(ICategoryRepository categoryRepository)
+        {
             _httpClient = new HttpClient();
             _htmlDocument = new HtmlDocument();
+            _categoryRepository = categoryRepository;
         }
         public async Task<string> CallUrl(string fullUrl)
         {
-            _httpClient.DefaultRequestHeaders.Add("User-Agent", "C# program");
-
-            var t = await _httpClient.GetStringAsync(fullUrl);
-            ParseHtml(t);
-            return t;
+            _httpClient.DefaultRequestHeaders.Add("User-Agent", "C# program");        
+            return await _httpClient.GetStringAsync(fullUrl);
         }
       
-        public Task<IEnumerable<Product>> Serch(IProductSearch typeSearch, string fullUrl)
+        public async Task<IEnumerable<Product>> Serch(string fullUrl, int categoryId, int siteId)
         {
-            throw new NotImplementedException();
+            this.siteId = siteId;
+            this.categoryId = categoryId;
+            return await ParseHtmlToObject(await CallUrl(fullUrl));
         }
 
-        private IEnumerable<Product> ParseHtml(string html)
+        public async Task<IEnumerable<Product>> ParseHtmlToObject(string html)
         {
             List<Product> productsSearch = new List<Product>();
 
@@ -41,8 +40,8 @@ namespace ProductSearchEngine.Services
             var products = _htmlDocument
                                     .DocumentNode
                                     .Descendants()
-                                    .Where(n => n.HasClass("SearchCard_ProductCard_Body__2wM_H")).ToList();
-
+                                    .Where(n => n.HasClass("SearchCard_ProductCard_Inner__7JhKb")).ToList();
+            //SearchCard_ProductCard_Inner__7JhKb
             foreach (var product in products)
             {
                 var image = product.Descendants("img").FirstOrDefault();
@@ -51,10 +50,17 @@ namespace ProductSearchEngine.Services
 
                 if (image != null && text != null)
                 {
-                    Product productSearch = new Product();
-                    productSearch.Img = image.Attributes["src"].Value;
-                    productSearch.Name = text.InnerText;
-                    productSearch.Price = price.InnerHtml;
+                    Product productSearch = new()
+                    {
+                        Img = image.Attributes["src"].Value,
+                        Name = text.InnerText,
+                        Description = text.InnerText,
+                        Price = price.InnerHtml,
+                        CategoryId = categoryId,
+                        Category = (await _categoryRepository.GetById(categoryId))
+                    };
+
+
                     productsSearch.Add(productSearch);
                 }
                 

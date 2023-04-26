@@ -27,8 +27,9 @@ namespace ProductSearchEngine.Infrastructure.Repository
 
         public async Task Add(T entity)
         {
-            _context.Set<T>().Add(entity);
+             _context.Set<T>().Add(entity);
             await _context.SaveChangesAsync();
+
         }
 
         public async Task Delete(T entity)

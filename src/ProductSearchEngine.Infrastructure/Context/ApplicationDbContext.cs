@@ -8,6 +8,7 @@ namespace ProductSearchEngine.Infrastructure.Context
         public DbSet<Category> Categories { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<Site> Sites { get; set; }
+        public DbSet<SearchProduct> SearchProducts { get; set; }
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options) { }
 

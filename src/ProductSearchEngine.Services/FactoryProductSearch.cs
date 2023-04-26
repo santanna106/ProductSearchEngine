@@ -5,18 +5,27 @@ namespace ProductSearchEngine.Services
 {
     public class FactoryProductSearch : IFactoryProductSearch
     {
+        private readonly IProductSearchBuscape _productSearchBuscape;
+        private readonly IProductSearchMercadoLivre _productSearchMercadoLivre;
+
+        public FactoryProductSearch(IProductSearchBuscape productSearchBuscape,
+            IProductSearchMercadoLivre productSearchMercadoLivre)
+        {
+            _productSearchBuscape = productSearchBuscape;
+            _productSearchMercadoLivre = productSearchMercadoLivre;
+        }
         public IProductSearch CreateProductSearch(int typeSearch)
         {
             IProductSearch typeSearchObject;
             switch (typeSearch) {
                 case (int) TypeProductSearch.ProductSerachBuscaPe:
-                    typeSearchObject = new ProductSearchBuscape();
+                    typeSearchObject = _productSearchBuscape;
                     break;
                 case (int)TypeProductSearch.ProductSerachMercadoLivre:
-                    typeSearchObject = new ProductSearchMercadoLivre();
+                    typeSearchObject = _productSearchMercadoLivre;
                     break;
                 default:
-                    typeSearchObject = new ProductSearchBuscape();
+                    typeSearchObject = _productSearchBuscape;
                     break;
             }
 

@@ -17,4 +17,8 @@
     <ProjectReference Include="..\ProductSearchEngine.Domain\ProductSearchEngine.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Migrations\" />
+  </ItemGroup>
+
 </Project>

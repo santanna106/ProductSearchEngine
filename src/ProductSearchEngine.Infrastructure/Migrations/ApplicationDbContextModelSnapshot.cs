@@ -31,33 +31,61 @@ namespace ProductSearchEngine.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("tCategory", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Mobile"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Refrigerator"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "Tv"
+                        });
                 });
 
             modelBuilder.Entity("ProductSearchEngine.Domain.Eitities.Product", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
 
                     b.Property<int>("CategoryId")
                         .HasColumnType("integer");
 
                     b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
+                        .HasMaxLength(200)
+                        .HasColumnType("TEXT")
+                        .HasColumnName("description");
+
+                    b.Property<string>("Img")
+                        .HasMaxLength(300)
+                        .HasColumnType("TEXT")
+                        .HasColumnName("img");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("TEXT");
+                        .HasMaxLength(100)
+                        .HasColumnType("TEXT")
+                        .HasColumnName("name");
 
-                    b.Property<double>("Price")
-                        .HasColumnType("REAL");
+                    b.Property<string>("Price")
+                        .HasMaxLength(50)
+                        .HasColumnType("TEXT")
+                        .HasColumnName("price");
 
                     b.HasKey("Id");
 
                     b.HasIndex("CategoryId");
 
-                    b.ToTable("Product");
+                    b.ToTable("tProduct", (string)null);
                 });
 
             modelBuilder.Entity("ProductSearchEngine.Domain.Eitities.SearchProduct", b =>
@@ -67,10 +95,10 @@ namespace ProductSearchEngine.Infrastructure.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("ProductId")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("integer");
 
                     b.Property<int>("SiteId")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 
@@ -78,37 +106,36 @@ namespace ProductSearchEngine.Infrastructure.Migrations
 
                     b.HasIndex("SiteId");
 
-                    b.ToTable("SearchProduct");
+                    b.ToTable("SearchProducts");
                 });
 
             modelBuilder.Entity("ProductSearchEngine.Domain.Eitities.Site", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("TEXT");
+                        .HasMaxLength(200)
+                        .HasColumnType("TEXT")
+                        .HasColumnName("name");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Site");
-                });
+                    b.ToTable("tSite", (string)null);
 
-            modelBuilder.Entity("ProductSite", b =>
-                {
-                    b.Property<int>("ProductsId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("SitesId")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("ProductsId", "SitesId");
-
-                    b.HasIndex("SitesId");
-
-                    b.ToTable("ProductSite");
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Mercado Livre"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Buscapé"
+                        });
                 });
 
             modelBuilder.Entity("ProductSearchEngine.Domain.Eitities.Product", b =>
@@ -139,21 +166,6 @@ namespace ProductSearchEngine.Infrastructure.Migrations
                     b.Navigation("Product");
 
                     b.Navigation("Site");
-                });
-
-            modelBuilder.Entity("ProductSite", b =>
-                {
-                    b.HasOne("ProductSearchEngine.Domain.Eitities.Product", null)
-                        .WithMany()
-                        .HasForeignKey("ProductsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("ProductSearchEngine.Domain.Eitities.Site", null)
-                        .WithMany()
-                        .HasForeignKey("SitesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("ProductSearchEngine.Domain.Eitities.Category", b =>

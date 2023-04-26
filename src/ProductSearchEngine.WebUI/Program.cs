@@ -26,7 +26,8 @@ builder.Services.AddScoped<ISiteRepository, SiteRepository>();
 builder.Services.AddScoped<HttpClient, HttpClient>();
 builder.Services.AddScoped<HtmlDocument, HtmlDocument>();
 
-builder.Services.AddScoped<IProductSearch, ProductSearchBuscape>();
+builder.Services.AddScoped<IProductSearchBuscape, ProductSearchBuscape>();
+builder.Services.AddScoped<IProductSearchMercadoLivre, ProductSearchMercadoLivre>();
 builder.Services.AddScoped<IFactoryProductSearch, FactoryProductSearch>();
 builder.Services.AddScoped<IDefineLinkSearch, DefineLinkSearch>();
 
@@ -52,6 +53,7 @@ app.UseAuthorization();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=ProductSearch}/{action=Index}/{id?}");
+
 
 
 app.Run();

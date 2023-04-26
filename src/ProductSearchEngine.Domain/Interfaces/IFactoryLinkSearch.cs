@@ -2,6 +2,6 @@
 {
     public interface IDefineLinkSearch
     {
-        string GetLink(int typeSearch,int category);
+        string GetLink(int siteId,int categoryId);
     }
 }

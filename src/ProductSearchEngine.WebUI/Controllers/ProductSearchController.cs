@@ -1,5 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using System.Linq;
+using ProductSearchEngine.Domain.Eitities;
 using ProductSearchEngine.Domain.Interfaces;
+using ProductSearchEngine.Domain.Interfaces.Repositories;
+using ProductSearchEngine.Infrastructure.Repository;
 
 namespace ProductSearchEngine.WebUI.Controllers
 {
@@ -7,31 +11,54 @@ namespace ProductSearchEngine.WebUI.Controllers
     {
         private readonly IFactoryProductSearch _factoryProductSearch;
         private readonly IDefineLinkSearch _defineLinkSerach;
+        private readonly IProductRepository _productRepository;
+
         public ProductSearchController(
             IFactoryProductSearch factoryProductSearch,
-            IDefineLinkSearch defineLinkSerach)
+            IDefineLinkSearch defineLinkSerach,
+            IProductRepository productRepository
+            )
         {
             _factoryProductSearch = factoryProductSearch;
             _defineLinkSerach = defineLinkSerach;
+            _productRepository = productRepository;
         }
         public IActionResult Index()
         {
-            return View();
+            List<Product> products = new List<Product>();
+            return View(products);
         }
         [HttpPost]
         public async Task<IActionResult> Index(IFormCollection collection)
         {
-            var typeSearch = Convert.ToInt32(collection["site"]);
-            var typeCategory = Convert.ToInt32(collection["category"]);
-            
+            var siteId = Convert.ToInt32(collection["site"]);
+            var categoryId = Convert.ToInt32(collection["category"]);
+            var description = collection["description"];
+
             var typeProductSerch = _factoryProductSearch
-                                        .CreateProductSearch(typeSearch);
+                                        .CreateProductSearch(siteId);
+            List<Product> products = new List<Product> (await _productRepository
+                    .GetProductCategorySite(
+                    siteId,
+                    categoryId,
+                    description)); 
 
-            await typeProductSerch
-                .CallUrl(_defineLinkSerach
-                            .GetLink(typeSearch, typeCategory));
+            if (!products.Any())
+            {
+                products = new List<Product>(await typeProductSerch
+                      .Serch(_defineLinkSerach
+                                  .GetLink(categoryId: categoryId, siteId: siteId),siteId: siteId, categoryId: categoryId));
 
-            return View();
+                products = products.Where(p => p.Img.Contains(".jpg")).ToList();
+                storeSearch(products, siteId);
+            } 
+
+            return View(products);
+        }
+
+        private async void storeSearch(List<Product> products,int siteId)
+        {
+            await _productRepository.addListProducts(products, siteId);
         }
     }
 }

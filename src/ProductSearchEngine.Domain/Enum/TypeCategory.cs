@@ -4,6 +4,6 @@
     {
         Mobile=1,
         Refrigerator = 2,
-        TV
+        TV=3
     }
 }

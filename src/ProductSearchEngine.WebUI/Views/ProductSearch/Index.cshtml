@@ -1,4 +1,6 @@
-﻿<form method="post">
+﻿@model IEnumerable< ProductSearchEngine.Domain.Eitities.Product>
+
+<form method="post">
     <div class="d-grid gap-3">
         <div class="form-group">
             <label class="control-label col-md-2" for="categories">Product Category</label>
@@ -36,3 +38,41 @@
 
     </div>
 </form>
+
+<br />
+<br />
+
+<table class="table">
+    <tr>
+        <th>
+            Product
+        </th>
+        <th>
+            Name
+        </th>
+        <th>
+            Category
+        </th>
+        <th>
+            Description
+        </th>
+    </tr>
+    @foreach (var item in Model)
+    {
+
+        <tr>
+            <td>
+                <img src="@item.Img" alt="@item.Name" />
+            </td>
+            <td>
+                @Html.Raw(item.Name)
+            </td>
+            <td>
+                @Html.Raw(item.Category.Name)
+            </td>
+            <td>
+                @Html.Raw(item.Description)
+            </td>
+        </tr>
+    }
+</table>

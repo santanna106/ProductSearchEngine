@@ -10,5 +10,9 @@
             Id = id;
             Name = name;
         }
+        public Site(int id)
+        {
+            Id = id;
+        }
     }
 }
