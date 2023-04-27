@@ -17,14 +17,14 @@ namespace ProductSearchEngine.Infrastructure.Repository
             Site site = new(siteId);
             foreach (Product product in products)
             {
-                if (product.Img.Contains(".jpg"))
-                {
+                //if (product.Img.Contains(".jpg"))
+                //{
                     Add(product);
                     _context.Products.Attach(product);
                     _context.Sites.Attach(site);
                     product.Sites.Add(site);
                     _context.SaveChanges();
-                }
+                //}
               
             }
                
@@ -41,14 +41,17 @@ namespace ProductSearchEngine.Infrastructure.Repository
             {
                 
                var query = from p in _context.Products
-                        join category in _context.Categories on p.CategoryId equals category.Id
+                           join searchP in _context.SearchProducts on p.Id equals searchP.ProductId
+                           join category in _context.Categories on p.CategoryId equals category.Id
                         where p.CategoryId == categoryId
+                           && searchP.SiteId == siteId
 
-                        select new Product
+                           select new Product
                         {
                             Name = p.Name,
                             Img = p.Img,
                             Description = p.Description,
+                            Price = p.Price,
                             Sites = (from sp in _context.SearchProducts
                                      join s in _context.Sites on sp.SiteId equals s.Id
                                      where sp.ProductId == p.Id
@@ -68,6 +71,7 @@ namespace ProductSearchEngine.Infrastructure.Repository
                             Name = p.Name,
                             Img = p.Img,
                             Description = p.Description,
+                            Price = p.Price,
                             Sites = (from sp in _context.SearchProducts
                                      join s in _context.Sites on sp.SiteId equals s.Id
                                      where sp.ProductId == p.Id

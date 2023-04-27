@@ -57,7 +57,15 @@ namespace ProductSearchEngine.Services
                         Description = text.InnerText,
                         Price = price.InnerHtml,
                         CategoryId = categoryId,
-                        Category = (await _categoryRepository.GetById(categoryId))
+                        Category = (await _categoryRepository.GetById(categoryId)),
+                        Sites = new List<Site>()
+                        {
+                            new Site()
+                            {
+                                Id = siteId,
+                                Name = "Buscapé"
+                            }
+                        }
                     };
 
 

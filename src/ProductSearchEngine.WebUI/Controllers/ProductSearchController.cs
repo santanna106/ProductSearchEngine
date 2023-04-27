@@ -4,6 +4,8 @@ using ProductSearchEngine.Domain.Eitities;
 using ProductSearchEngine.Domain.Interfaces;
 using ProductSearchEngine.Domain.Interfaces.Repositories;
 using ProductSearchEngine.Infrastructure.Repository;
+using ProductSearchEngine.WebUI.DTO;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace ProductSearchEngine.WebUI.Controllers
 {
@@ -12,22 +14,55 @@ namespace ProductSearchEngine.WebUI.Controllers
         private readonly IFactoryProductSearch _factoryProductSearch;
         private readonly IDefineLinkSearch _defineLinkSerach;
         private readonly IProductRepository _productRepository;
+        private readonly ICategoryRepository _categoryRepository;
+        private readonly ISiteRepository _siteRepository;
 
         public ProductSearchController(
             IFactoryProductSearch factoryProductSearch,
             IDefineLinkSearch defineLinkSerach,
-            IProductRepository productRepository
+            IProductRepository productRepository,
+            ICategoryRepository categoryRepository,
+            ISiteRepository siteRepository
             )
         {
             _factoryProductSearch = factoryProductSearch;
             _defineLinkSerach = defineLinkSerach;
             _productRepository = productRepository;
+            _siteRepository = siteRepository;
+            _categoryRepository = categoryRepository;
         }
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
             List<Product> products = new List<Product>();
+            loadComboCategory();
+            loadComboSite();
             return View(products);
         }
+
+        private async void loadComboCategory()
+        {
+            List<SelectListItem> items = new List<SelectListItem>();
+            var categories = (await _categoryRepository.GetAll()).ToList();
+
+            foreach ( var category in categories )
+            {
+                items.Add(new SelectListItem { Text = category.Name, Value = category.Id.ToString() });
+            }
+            ViewBag.categories = items;
+        }
+
+        private async void loadComboSite()
+        {
+            List<SelectListItem> items = new List<SelectListItem>();
+            var sites = (await _siteRepository.GetAll()).ToList();
+
+            foreach (var site in sites)
+            {
+                items.Add(new SelectListItem { Text = site.Name, Value = site.Id.ToString() });
+            }
+            ViewBag.sites = items;
+        }
+
         [HttpPost]
         public async Task<IActionResult> Index(IFormCollection collection)
         {
@@ -49,10 +84,12 @@ namespace ProductSearchEngine.WebUI.Controllers
                       .Serch(_defineLinkSerach
                                   .GetLink(categoryId: categoryId, siteId: siteId),siteId: siteId, categoryId: categoryId));
 
-                products = products.Where(p => p.Img.Contains(".jpg")).ToList();
+                //products = products.Where(p => p.Img.Contains(".jpg")).ToList();
                 storeSearch(products, siteId);
-            } 
+            }
 
+            loadComboCategory();
+            loadComboSite();
             return View(products);
         }
 
