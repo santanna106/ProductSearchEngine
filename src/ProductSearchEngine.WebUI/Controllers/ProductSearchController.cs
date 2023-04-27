@@ -35,8 +35,8 @@ namespace ProductSearchEngine.WebUI.Controllers
             loadComboSite();
             return View(products);
         }
-
-        private async void loadComboCategory()
+       
+            private async void loadComboCategory()
         {
             List<SelectListItem> items = new List<SelectListItem>();
             var categories = (await _categoryRepository.GetAll()).ToList();
@@ -80,15 +80,19 @@ namespace ProductSearchEngine.WebUI.Controllers
                 products = new List<Product>(await typeProductSerch
                       .Serch(_defineLinkSerach
                                   .GetLink(categoryId: categoryId, siteId: siteId),siteId: siteId, categoryId: categoryId));
-                storeSearch(products, siteId);
+               await storeSearch(products, siteId);
             }
+   
+            ViewBag.siteName = (await _siteRepository.GetAll())
+                                .Where(s => s.Id == siteId)
+                                .FirstOrDefault().Name;
 
             loadComboCategory();
             loadComboSite();
             return View(products);
         }
 
-        private async void storeSearch(List<Product> products,int siteId)
+        private async Task storeSearch(List<Product> products,int siteId)
         {
             await _productRepository.addListProducts(products, siteId);
         }

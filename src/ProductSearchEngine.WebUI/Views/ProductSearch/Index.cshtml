@@ -42,6 +42,11 @@
 
 <br />
 <br />
+@if(!string.IsNullOrEmpty(ViewBag.siteName)){
+   <div>
+    <h1 style="color:red">Site Search: @Html.Raw(ViewBag.siteName)</h1>
+   </div>
+}
 
 <table class="table">
     <tr>
@@ -84,7 +89,7 @@
                 @Html.Raw(item.Price)
             </td>
              <td>
-                @Html.Raw(item.Sites[0].Name)
+                @Html.Raw( string.IsNullOrEmpty(item.Sites[0].Name)  ?  ViewBag.siteName : item.Sites[0].Name )
             </td>
         </tr>
     }

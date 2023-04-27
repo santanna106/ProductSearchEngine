@@ -22,7 +22,7 @@ namespace ProductSearchEngine.Infrastructure.Repository
 
         public async Task<T> GetById(int? id)
         {
-            return _context.Set<T>().Find(id);
+            return _context.Set<T>().FindAsync(id).Result;
         }
 
         public async Task Add(T entity)
@@ -44,11 +44,6 @@ namespace ProductSearchEngine.Infrastructure.Repository
             _context.Set<T>().Update(entity);
             await _context.SaveChangesAsync();
         }
-        /*
-        public async Task<ICollection<T>> FindAllFilter(Expression<Func<T, bool>> expression)
-        {
-            return await _context.Set<T>().Where(expression).ToListAsync();
-        }
-        */
+        
     }
 }
