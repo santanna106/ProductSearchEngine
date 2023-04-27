@@ -17,15 +17,14 @@ namespace ProductSearchEngine.Infrastructure.Repository
             Site site = new(siteId);
             foreach (Product product in products)
             {
-                //if (product.Img.Contains(".jpg"))
-                //{
-                    Add(product);
-                    _context.Products.Attach(product);
-                    _context.Sites.Attach(site);
-                    product.Sites.Add(site);
-                    _context.SaveChanges();
-                //}
-              
+               
+               await Add(product);
+
+                _context.Products.Attach(product);
+                _context.Sites.Attach(site);
+                product.Sites.Add(site);
+
+                _context.SaveChanges();
             }
                
         }

@@ -1,10 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using System.Linq;
 using ProductSearchEngine.Domain.Eitities;
 using ProductSearchEngine.Domain.Interfaces;
 using ProductSearchEngine.Domain.Interfaces.Repositories;
-using ProductSearchEngine.Infrastructure.Repository;
-using ProductSearchEngine.WebUI.DTO;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace ProductSearchEngine.WebUI.Controllers
@@ -83,8 +80,6 @@ namespace ProductSearchEngine.WebUI.Controllers
                 products = new List<Product>(await typeProductSerch
                       .Serch(_defineLinkSerach
                                   .GetLink(categoryId: categoryId, siteId: siteId),siteId: siteId, categoryId: categoryId));
-
-                //products = products.Where(p => p.Img.Contains(".jpg")).ToList();
                 storeSearch(products, siteId);
             }
 

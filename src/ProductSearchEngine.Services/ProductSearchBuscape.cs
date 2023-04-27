@@ -10,14 +10,16 @@ namespace ProductSearchEngine.Services
         private readonly HttpClient _httpClient;
         private readonly HtmlDocument _htmlDocument;
         private readonly ICategoryRepository _categoryRepository;
+        private readonly ISiteRepository _siteRepository;
         private int siteId;
         private int categoryId;
    
-        public ProductSearchBuscape(ICategoryRepository categoryRepository)
+        public ProductSearchBuscape(ICategoryRepository categoryRepository, ISiteRepository siteRepository)
         {
             _httpClient = new HttpClient();
             _htmlDocument = new HtmlDocument();
             _categoryRepository = categoryRepository;
+            _siteRepository = siteRepository;
         }
         public async Task<string> CallUrl(string fullUrl)
         {
@@ -57,17 +59,8 @@ namespace ProductSearchEngine.Services
                         Description = text.InnerText,
                         Price = price.InnerHtml,
                         CategoryId = categoryId,
-                        Category = (await _categoryRepository.GetById(categoryId)),
-                        Sites = new List<Site>()
-                        {
-                            new Site()
-                            {
-                                Id = siteId,
-                                Name = "Buscapé"
-                            }
-                        }
+                        Category = (await _categoryRepository.GetById(categoryId))
                     };
-
 
                     productsSearch.Add(productSearch);
                 }

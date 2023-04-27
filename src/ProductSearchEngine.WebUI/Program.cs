@@ -1,5 +1,4 @@
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using ProductSearchEngine.Domain.Interfaces.Repositories;
 using ProductSearchEngine.Domain.Interfaces;
 using ProductSearchEngine.Infrastructure.Context;
@@ -53,7 +52,5 @@ app.UseAuthorization();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=ProductSearch}/{action=Index}/{id?}");
-
-
 
 app.Run();

@@ -7,7 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ProductSearchEngine.CrossCutting\ProductSearchEngine.CrossCutting.csproj" />
     <ProjectReference Include="..\ProductSearchEngine.Domain\ProductSearchEngine.Domain.csproj" />
     <ProjectReference Include="..\ProductSearchEngine.Services\ProductSearchEngine.Services.csproj" />
   </ItemGroup>

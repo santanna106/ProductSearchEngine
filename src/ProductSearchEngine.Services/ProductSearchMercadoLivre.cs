@@ -10,15 +10,16 @@ namespace ProductSearchEngine.Services
         private readonly HttpClient _httpClient;
         private readonly HtmlDocument _htmlDocument;
         private readonly ICategoryRepository _categoryRepository;
+        private readonly ISiteRepository _siteRepository;
         private int siteId;
         private int categoryId;
 
-        public ProductSearchMercadoLivre(ICategoryRepository categoryRepository)
+        public ProductSearchMercadoLivre(ICategoryRepository categoryRepository, ISiteRepository siteRepository)
         {
             _httpClient = new HttpClient();
             _htmlDocument = new HtmlDocument();
             _categoryRepository = categoryRepository;
- 
+            _siteRepository = siteRepository;
         }
         public async Task<string> CallUrl(string fullUrl)
         {
@@ -33,13 +34,6 @@ namespace ProductSearchEngine.Services
         public async Task<IEnumerable<Product>> ParseHtmlToObject(string html)
         {
             List<Product> productsSearch = new List<Product>();
-
-            HtmlDocument htmTeste = new HtmlDocument();
-
-            htmTeste.LoadHtml(html);
-            var t = htmTeste.DocumentNode
-                                    .Descendants()
-                                    .Where(n => n.HasClass("ui-recommendations-card__image")).ToList();
 
             _htmlDocument.LoadHtml(html);
             var products = _htmlDocument
@@ -85,15 +79,7 @@ namespace ProductSearchEngine.Services
                         Description = name.InnerText,
                         Price = (price != null) ? "R$ " + price.InnerHtml : "", 
                         CategoryId = categoryId,
-                        Category = (await _categoryRepository.GetById(categoryId)),
-                        Sites = new List<Site>()
-                        {
-                            new Site()
-                            {
-                                Id = siteId,
-                                Name = "Mercado Livre"
-                            }
-                        }
+                        Category = (await _categoryRepository.GetById(categoryId))
                     };
                     productsSearch.Add(productSearch);
                 }
